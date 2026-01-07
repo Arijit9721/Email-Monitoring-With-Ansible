@@ -4,6 +4,7 @@
 sudo apt update && sudo apt upgrade -y
 
 # install ansible and create ansible user
+sudo add-apt-repository --yes --update ppa:ansible/ansible 
 sudo apt install ansible -y
 sudo useradd -m -s /bin/bash ansible  # create the ansible user and set it as default shell
 sudo usermod -aG sudo ansible         # add the ansible user to sudo group
@@ -15,9 +16,11 @@ chown -R ansible:ansible /home/ansible/.ssh
 chmod 700 /home/ansible/.ssh
 
 # setting up the private key in ansible user
-cat <<EOF > /home/ansible/.ssh/id_rsa    # safely adding the key to ansible
-${tls_private_key.ansible_key.private_key_pem}
+touch /home/ansible/.ssh/id_rsa
+cat <<EOF > /home/ansible/.ssh/id_rsa
+${private_key}
 EOF
+chown ansible:ansible /home/ansible/.ssh/id_rsa
 chmod 600 /home/ansible/.ssh/id_rsa
 cat <<EOF > /home/ansible/.ssh/config    # disable strict host key checking
 Host *

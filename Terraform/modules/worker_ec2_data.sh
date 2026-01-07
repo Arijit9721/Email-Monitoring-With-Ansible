@@ -11,10 +11,11 @@ echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible # making ansible 
 # Creating the .ssh directory and setting ownership
 mkdir /home/ansible/.ssh
 chown -R ansible:ansible /home/ansible/.ssh
-chmod 700 /home/ansible/.ssh
 
 # setting up the public key for passwordless auth
-cat <<EOF > /home/ansible/.ssh/authorized_keys 
-"${tls_private_key.ansible_key.public_key_openssh}"
+touch /home/ansible/.ssh/authorized_keys
+cat <<EOF >> /home/ansible/.ssh/authorized_keys
+${public_key}
 EOF
+chown ansible:ansible /home/ansible/.ssh/authorized_keys
 chmod 600 /home/ansible/.ssh/authorized_keys
