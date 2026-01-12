@@ -10,7 +10,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
-      {% for host in groups['name_node_exporter'] %}
+      {% for host in groups['env_dev'] %}
       {% if inventory_hostname != host %}
         - '{{ host }}:9100'
       {% endif %}
@@ -23,7 +23,7 @@ alerting:
   alertmanagers:
   - static_configs:
     - targets:
-    {% for host in groups['name_alertmanager'] %}
+    {% for host in groups['env_dev'] %}
     {% if inventory_hostname != host %}
       - '{{ host }}:9093'
     {% endif %}

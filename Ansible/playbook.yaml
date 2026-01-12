@@ -1,24 +1,24 @@
 ---
 - name: Setup AlertManager
-  hosts: name_alertmanager
+  hosts: env_dev
   become: true
   roles:
     - alertmanager
 
 - name: Setup Node Exporter
-  hosts: name_node_exporter
+  hosts: env_dev
   become: true
   roles:
     - node_exporter
 
 - name: Setup Prometheus
-  hosts: name_prometheus
+  hosts: env_dev
   become: true
   roles:
     - prometheus
 
 - name: Setup Grafana
-  hosts: name_grafana
+  hosts: env_dev
   become: true
   roles:
     - grafana
