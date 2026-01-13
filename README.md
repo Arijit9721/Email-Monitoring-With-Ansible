@@ -12,19 +12,34 @@ graph TB
     end
 
     subgraph CLOUD["AWS CLOUD"]
-        subgraph INFRA["Infrastructure"]
-            ROLE[IAM Role]
-            SG[Security Groups]
+        direction TB
+
+        subgraph TOP[" "]
+            direction LR
+            INFRA[Infrastructure:<br/>IAM Role<br/>Security Groups]
+            SPACER1[" "]
+            ANSIBLE["Ansible Hub<br/>Dynamic Inventory<br/>EC2 Instance"]
+
+            style SPACER1 fill:none,stroke:none
         end
 
-        ANSIBLE["Ansible Hub - Dynamic Inventory - EC2"]
+        SPACER2[" "]
 
         subgraph MONITOR["Monitoring Stack - EC2 Instances"]
+            direction TB
+            ROW1[" "]
             PROM[Prometheus :9090]
             ALERT[Alertmanager :9093]
+            ROW2[" "]
             GRAF[Grafana :3000]
             NODE[Node Exporters :9100]
+
+            style ROW1 fill:none,stroke:none
+            style ROW2 fill:none,stroke:none
         end
+
+        style SPACER2 fill:none,stroke:none
+        style TOP fill:none,stroke:none
     end
 
     subgraph EXT["EXTERNAL"]
@@ -33,7 +48,7 @@ graph TB
 
     TF -->|Provisions| CLOUD
     AN -->|SSH to| ANSIBLE
-    ANSIBLE -->|Deploys| MONITOR
+    ANSIBLE ====>|Deploys| MONITOR
     INFRA -.->|Secures| ANSIBLE
 
     NODE -->|Metrics| PROM
@@ -42,13 +57,12 @@ graph TB
     GRAF -->|Queries| PROM
 
     style ANSIBLE fill:#4A90E2,color:#fff
+    style INFRA fill:#9E9E9E,color:#fff
     style PROM fill:#E96843,color:#fff
     style ALERT fill:#E96843,color:#fff
     style GRAF fill:#F46800,color:#fff
     style NODE fill:#37D4A3,color:#fff
-    style LOCAL fill:#f0f0f0
-    style CLOUD fill:#e8f4f8
-    style EXT fill:#fff8e1
+    style MONITOR fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
 ```
 
 ## Features
@@ -126,7 +140,7 @@ sudo su - ansible
 cd /home/ansible/Ansible_folder/Ansible
 ```
 
-### 5. Configure Alertmanager (Optional)
+### 5. Configure Alertmanager
 
 Edit `roles/alertmanager/files/alertmanager.yaml` and add your Slack webhook URL:
 
